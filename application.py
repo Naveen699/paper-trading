@@ -128,6 +128,6 @@ def return_home():
 	initial = int(initial[0]['cash'])
 	print(initial)
 	newCash = initial - total1
-	cur.execute("UPDATE accounts SET cash=%s", (newCash))
-	db.commit()
+	#cur.execute("UPDATE accounts SET cash=%s", (newCash))
+	#db.commit()
 	return redirect(url_for('home'))
