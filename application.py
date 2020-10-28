@@ -120,14 +120,17 @@ def execute():
 @app.route('/return_home', methods=['GET', 'POST'])
 def return_home():
 	cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-	db = MySQLdb.connect("us-cdbr-east-02.cleardb.com", "b6fe21968c7aaf", "6f6f2e8d", "heroku_0400bde6520f92f")
-	cur = db.cursor()
+	
 	cursor.execute("SELECT cash FROM accounts WHERE id=%s", (session['id'],))
 	total1 = session.get('total', None)
 	initial = cursor.fetchall()
 	initial = int(initial[0]['cash'])
 	print(initial)
 	newCash = initial - total1
-	#cur.execute("UPDATE accounts SET cash=%s", (newCash))
-	#db.commit()
+	db = MySQLdb.connect("us-cdbr-east-02.cleardb.com", "b6fe21968c7aaf", "6f6f2e8d", "heroku_0400bde6520f92f")
+	cur = db.cursor()
+	cur.execute("UPDATE accounts SET cash=%s WHERE id=%s", (newCash, session['id']))
+	db.commit()
+	cur.execute("INSERT INTO holdings (account_id, position, position_amount) VALUES (%s, %s, %s)", (session['id'], str(session.get('search',None)).upper(), session.get('buy',None)))
+	db.commit()
 	return redirect(url_for('home'))
