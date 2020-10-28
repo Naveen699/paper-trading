@@ -120,7 +120,6 @@ def execute():
 @app.route('/return_home', methods=['GET', 'POST'])
 def return_home():
 	cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-	
 	cursor.execute("SELECT cash FROM accounts WHERE id=%s", (session['id'],))
 	total1 = session.get('total', None)
 	initial = cursor.fetchall()

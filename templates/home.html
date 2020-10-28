@@ -5,7 +5,9 @@
 {% block content %}
 <h2>Home Page</h2>
 <p>Welcome back, {{ name }}!</p>
+
 {% for i in range(0, amount) %}
 	<h1>{{ value[i]['position'] }} : {{ value[i]['position_amount'] }} </h1>
 {%endfor%}
+<h1>Cash Power: {{value[0]['cash']}}</h1>
 {% endblock %}
