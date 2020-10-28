@@ -1,0 +1,13 @@
+{% extends 'layout.html' %}
+
+{% block title %}View Stock{% endblock %}
+
+{% block content %}
+<h2>View</h2>
+<p>{{stock}} Information: </p>
+<h3>high: {{high}}</h3>
+<h3>last: {{last}}</h3>
+<h3>open: {{open}}</h3>
+<h3>As of {{time}}</h3>
+<a href="{{ url_for('buy') }}"><i class="fas fa-buy"></i>BUY</a>
+{% endblock %}
