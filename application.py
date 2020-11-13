@@ -56,7 +56,15 @@ def home():
 		amount = cursor.fetchall()
 		amount = amount[0]['COUNT(*)'] 
 		print(amount)
-		return render_template('home.html', name = session['username'], value=data, amount=amount)
+		gain = data[0]['cash'] - 1000000
+		if gain < 0 :
+			gain = gain*-1
+		gain = "{:,}".format(gain)
+		cash = data[0]['cash']
+		cash = "{:,}".format(cash)
+		print(cash)
+		i = 1
+		return render_template('home.html', name = session['username'], value=data, amount=amount, cash=cash, i=i, gain=gain,cash1=cash)
 	return redirect(url_for('login'))
 
 @app.route('/search', methods=['GET', 'POST'])
@@ -100,6 +108,20 @@ def buy():
 		return redirect(url_for('execute'))
 	return render_template('buy.html')
 
+@app.route('/sell', methods=['GET', 'POST'])
+def sell():
+	cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+	stock = str(session.get('search', None))
+	stock = stock.upper()
+	last = session.get('last', None)
+	cursor.execute("SELECT position_amount FROM holdings WHERE position=%s", (stock,))
+	amount = cursor.fetchall()
+	amount = amount[0]['position_amount']
+	total = float(amount) * float(last)
+	session['total1'] = total
+
+	return render_template('sell.html', total=total, amount=amount, last=last, stock=stock)
+
 @app.route('/execute', methods=['GET', 'POST'])
 def execute():
 	db = MySQLdb.connect("us-cdbr-east-02.cleardb.com", "b6fe21968c7aaf", "6f6f2e8d", "heroku_0400bde6520f92f")
@@ -114,8 +136,17 @@ def execute():
 	total = "$" + str(total1)
 	session['total'] =total1
 
-
 	return render_template('summary.html', buy=buy, last=last1, open=open1, high=high1, time=time1, stock=stock, total=total)
+
+@app.route('/return_home1', methods=['GET', 'POST'])
+def return_home1():
+	db = MySQLdb.connect("us-cdbr-east-02.cleardb.com", "b6fe21968c7aaf", "6f6f2e8d", "heroku_0400bde6520f92f")
+	cur = db.cursor()
+	total = session.get('total1',None)
+	print(total)
+	cur.execute("UPDATE accounts SET cash = cash + %s", (total,))
+	db.commit()
+	return redirect(url_for('home'))
 
 @app.route('/return_home', methods=['GET', 'POST'])
 def return_home():

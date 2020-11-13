@@ -1,0 +1,57 @@
+{% extends 'layout.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+
+<style type="text/css">
+	h1 {
+  font-size: 40px;
+	}
+
+	h2 {
+ 	 font-size: 30px;
+	}
+	h3 {
+		font-size: 30px;
+		display: inline;
+		margin: 100px;
+		padding: 40px;
+	}
+
+	p {
+ 	 font-size: 14px;
+	}
+
+	a {
+		font-sze: 90px;
+	}
+</style>
+
+
+<h2>Order Summary</h2>
+<div style="clear: both">
+	<div style="clear: both;">
+		<h3>Shares:</h3>
+		<h3>{{amount}}</h3>
+	</div>
+
+	<div style="clear: both;">
+		<h3>Price:  </h3>
+		<h3>{{last}}</h3>
+	</div>
+
+	<div style="clear: both;">
+		<h3>Stock:</h3>
+		<h3>{{stock}}</h3>
+	</div>
+	<hr />
+	<div style="clear: both;">
+		<h3>Estimated Total: </h3>
+		<h3>{{total}}</h3>
+	</div>
+	<a href="{{ url_for('return_home') }}"><i class="fas fa-buy"></i>SELL</a>
+</div>
+
+
+{% endblock %}
